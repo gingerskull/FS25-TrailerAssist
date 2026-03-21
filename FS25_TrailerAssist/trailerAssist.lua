@@ -220,15 +220,15 @@ function trailerAssist:onUpdate(dt, isActiveForInput, isActiveForInputIgnoreSele
 
 
 	if self.isServer then
-		local motor
-		if self.spec_motorized ~= nil then 
-			motor = self.spec_motorized.motor
-		end 
-		if motor == nil then 
-			trailerAssist.mbSetState( self, "taMovingDirection", self.movingDirection )
-		else
-			trailerAssist.mbSetState( self, "taMovingDirection", motor.currentDirection )
-		end 
+		local taDir = self.movingDirection
+		if taDir == 0 then
+			if self.spec_drivable ~= nil and self.spec_drivable.reverserDirection ~= nil then
+				taDir = self.spec_drivable.reverserDirection
+			elseif self.spec_motorized ~= nil and self.spec_motorized.motor ~= nil and self.spec_motorized.motor.currentDirection ~= nil then 
+				taDir = self.spec_motorized.motor.currentDirection
+			end
+		end
+		trailerAssist.mbSetState( self, "taMovingDirection", taDir ) 
 
 		if self:getIsEntered() and trailerAssist.tableGetN( self.spec_attacherJoints.attachedImplements ) > 0 then
 			self.taSumDtCalc = self.taSumDtCalc + dt
@@ -241,7 +241,7 @@ function trailerAssist:onUpdate(dt, isActiveForInput, isActiveForInputIgnoreSele
 					if joint.inTheBack then
 						inTheBack  = true
 					else
-						intheFront = true
+						inTheFront = true
 					end
 				end
 			end
