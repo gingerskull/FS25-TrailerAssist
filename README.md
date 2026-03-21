@@ -1,20 +1,32 @@
-# Trailer Assist for Farming Simulator 2019
+# Trailer Assist — Farming Simulator 25
 
-## Description
+Makes reversing with a trailer easier. Automatically steers the tractor so the trailer goes where you point it.
 
-## Developer version
-Please be aware you're using a developer version, which may and will contain errors, bugs, mistakes and unfinished code. 
+Originally created by [mogli (Stefan Biedenstein)](https://github.com/Mogli12), ported to FS25.
 
-You have been warned.
+## Controls
 
-If you're still ok with this, please remember to post possible issues that you find in the developer version. 
-That's the only way we can find sources of error and fix them. 
-Be as specific as possible:
+| Key | Action |
+|-----|--------|
+| Alt + T | Cycle mode: Off → Rotation → Tool Angle → Off |
+| Shift + T | Hold for Rotation mode |
+| Ctrl + T | Hold for Tool Angle mode |
 
-* tell us the version number
-* only use the vehicles necessary, not 10 other ones at a time
-* which vehicles are involved, what is the intended action?
-* Post! The! Log! to [Gist](https://gist.github.com/) or [PasteBin](http://pastebin.com/)
+Only active while reversing. A yellow angle display appears at the top of the screen when engaged.
 
-## Credits
-* Stefan Biedenstein
+Also works with two-axle/turntable trailers, chained trailers, and articulated vehicles.
+
+## Installation
+
+Drop `FS25_TrailerAssist.zip` into your `Documents/My Games/FarmingSimulator2025/mods/` folder. Don't unzip it.
+
+## Configuration
+
+Custom settings can be placed in `Documents/My Games/FarmingSimulator2025/modSettings/trailerAssistConfig.xml`. See the included config file for available options.
+
+## Building
+
+```
+build.bat    # creates the zip
+deploy.bat   # copies it to the mods folder
+```

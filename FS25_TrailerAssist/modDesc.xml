@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="107">
+    <author>mogli/gingerskull</author>
+    <title>
+        <en>FS25 Trailer Assist</en>
+    </title>
+    <description>
+        <en><![CDATA[
+TrailerAssist makes reversing with a trailer easier. You activate it with the following keys:
+
+Alt+T: Toggle TrailerAssist permanently on/off.
+Shift+T: Hold to activate rotation mode (compass direction).
+Ctrl+T: Hold to activate tool angle mode (angle between tractor and trailer).
+A: Turn left
+D: Turn right
+
+You can see that TrailerAssist is activated when yellow degree numbers appear at the top of the screen. TrailerAssist will only be active when driving backwards.
+]]></en>
+        <de><![CDATA[
+TrailerAssist erleichtert das Rückwärtsrangieren mit Anhänger. Bedienung mit folgenden Tasten:
+
+Alt+T: TrailerAssist permanent ein-/ausschalten.
+Shift+T: Gedrückt halten für Rotationsmodus (Kompassrichtung).
+Strg+T: Gedrückt halten für Werkzeugwinkelmodus (Winkel zwischen Traktor und Anhänger).
+A: nach links fahren
+D: nach rechts fahren
+
+Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
+]]></de>
+        <fr><![CDATA[
+TrailerAssist facilite les manoeuvres en marche arrière avec une remorque. Commandes:
+
+Alt+T: Activer/désactiver TrailerAssist en permanence.
+Shift+T: Maintenir pour le mode rotation (direction boussole).
+Ctrl+T: Maintenir pour le mode angle d'outil (angle entre tracteur et remorque).
+A: Tourner à gauche
+D: Tourner à droite
+
+TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'écran. TrailerAssist n'est actif qu'en marche arrière.
+]]></fr>
+    </description>
+    <multiplayer supported="true"/>
+    <iconFilename>dds/icon_trailerAssist.dds</iconFilename>
+    <version>1.0.0.0</version>
+    <l10n filenamePrefix="l10n/modDesc_l10n">
+        <text name="taVERSION">
+            <de>TrailerAssist v1.0.0.0</de>
+            <en>TrailerAssist v1.0.0.0</en>
+        </text>
+    </l10n>
+    <actions>
+        <action name="taMODE"  category="VEHICLE" />
+        <action name="taMODE1" category="VEHICLE" />
+        <action name="taMODE2" category="VEHICLE" />
+    </actions>
+    <inputBinding>
+        <actionBinding action="taMODE" ><binding device="KB_MOUSE_DEFAULT" input="KEY_lalt KEY_t" axisComponent="+" inputComponent="+" index="1"/></actionBinding>
+        <actionBinding action="taMODE1"><binding device="KB_MOUSE_DEFAULT" input="KEY_lshift KEY_t" axisComponent="+" inputComponent="+" index="1"/></actionBinding>
+        <actionBinding action="taMODE2"><binding device="KB_MOUSE_DEFAULT" input="KEY_lctrl KEY_t" axisComponent="+" inputComponent="+" index="1"/></actionBinding>
+    </inputBinding>
+    <extraSourceFiles>
+        <sourceFile filename="trailerAssist.lua" />
+        <sourceFile filename="trailerAssistRegister.lua" />
+    </extraSourceFiles>
+</modDesc>
