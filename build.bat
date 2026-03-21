@@ -1,5 +1,5 @@
-del FS22_TrailerAssist.zip
-cd FS22_TrailerAssist
-tar -a -c -f ..\FS22_TrailerAssist.zip *.*
+del FS25_TrailerAssist.zip
+cd FS25_TrailerAssist
+tar -a -c -f ..\FS25_TrailerAssist.zip *.*
 cd ..
 

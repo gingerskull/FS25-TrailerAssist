@@ -116,6 +116,9 @@ function trailerAssist:onDraw()
 			trailerAssist.backgroundOverlayId    = createImageOverlay( Utils.getFilename( "dds/bg.dds", g_trailerAssist.taDirectory))
 			setOverlayColor( trailerAssist.backgroundOverlayId, 0,0,0, 0.4 )
 		end
+		if not getIsOverlayReady( trailerAssist.backgroundOverlayId ) then
+			return
+		end
 
 		setTextAlignment(RenderText.ALIGN_CENTER) 
 		
@@ -186,7 +189,9 @@ function trailerAssist:onDraw()
 	end	
 	
 	if helpText ~= nil and helpText ~= "" then 
-		g_currentMission:addExtraPrintText( helpText )
+		if g_currentMission.addExtraPrintText ~= nil then
+			g_currentMission:addExtraPrintText( helpText )
+		end
 	end 
 end
 
@@ -477,7 +482,7 @@ end
 --***************************************************************
 function trailerAssist.tableGetN( tab )
 	if type( tab ) == "table" then
-		return table.getn( tab )
+		return #tab
 	end
 	return 0
 end	
@@ -492,18 +497,18 @@ function trailerAssist:calculateDimensions()
 	
 	if     1 == 2 then--self.acRefNode ~= nil then
 		self.taRefNode = self.acRefNode 
+	elseif self.aiSteeringCenterNode ~= nil then
+		self.taRefNode = self.aiSteeringCenterNode
 	elseif self.aiTractorDirectionNode  ~= nil then
 		self.taRefNode = self.aiTractorDirectionNode
-	elseif self.aiTreshingDirectionNode ~= nil then
-		self.taRefNode = self.aiTreshingDirectionNode
 	else
 		self.taRefNode = self.steeringAxleNode
 	end
 	
 	self.taDimensions                  = {};
 	
-	self.taDimensions.maxSteeringAngle = math.rad( Utils.getNoNil( self.maxRotation, 25 ))
-	self.taDimensions.radius           = Utils.getNoNil( self.maxTurningRadius, 6.25 )
+	self.taDimensions.maxSteeringAngle = math.rad( (self.maxRotation or 25) )
+	self.taDimensions.radius           = (self.maxTurningRadius or 6.25)
 	self.taDimensions.wheelBase        = math.tan( self.taDimensions.maxSteeringAngle ) * self.taDimensions.radius
 	self.taDimensions.zOffset          = -0.5 * self.taDimensions.wheelBase;
 	
@@ -542,9 +547,12 @@ function trailerAssist:calculateDimensions()
 			setRotation(wheel.repr, unpack(temp2))
 			setRotation(wheel.driveNode, unpack(temp1))
 
-			local a = 0.5 * (math.abs(wheel.rotMin)+math.abs(wheel.rotMax));
+			local wheelRotMin = wheel.rotMin or 0
+			local wheelRotMax = wheel.rotMax or 0
+			local wheelRotSpeed = wheel.rotSpeed or 0
+			local a = 0.5 * (math.abs(wheelRotMin)+math.abs(wheelRotMax));
 
-			if     wheel.rotSpeed >  1E-03 then
+			if     wheelRotSpeed >  1E-03 then
 				if x > 0 then
 					if zlm < z then
 						zlm = z;
@@ -556,7 +564,7 @@ function trailerAssist:calculateDimensions()
 						arm = a;
 					end
 				end
-			elseif wheel.rotSpeed > -1E-03 then
+			elseif wheelRotSpeed > -1E-03 then
 				if x > 0 then
 					zl0 = zl0 + z;
 					nl0 = nl0 + 1;
@@ -932,7 +940,7 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 	local axisSideLast  = self.taAxisSideLast
 	self.taAxisSideLast = nil 
 	
-	if trailerAssist.isActive( self ) then
+	if trailerAssist.isActive( self ) and self.taJoints ~= nil then
 		local sumTargetFactors = 0
 		for _,joint in pairs( self.taJoints ) do
 			if     ( self.taMovingDirection < 0 and joint.inTheBack )
