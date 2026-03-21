@@ -41,11 +41,11 @@ TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'éc
     </description>
     <multiplayer supported="true"/>
     <iconFilename>dds/icon_trailerAssist.dds</iconFilename>
-    <version>1.0.0.0</version>
+    <version>1.0.1.0</version>
     <l10n filenamePrefix="l10n/modDesc_l10n">
         <text name="taVERSION">
-            <de>TrailerAssist v1.0.0.0</de>
-            <en>TrailerAssist v1.0.0.0</en>
+            <de>TrailerAssist v1.0.1.0</de>
+            <en>TrailerAssist v1.0.1.0</en>
         </text>
     </l10n>
     <actions>
