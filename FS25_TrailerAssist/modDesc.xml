@@ -15,6 +15,14 @@ A: Turn left
 D: Turn right
 
 You can see that TrailerAssist is activated when yellow degree numbers appear at the top of the screen. TrailerAssist will only be active when driving backwards.
+
+Changelog 1.0.2.0:
+- Fixed active state pulsing on inclines
+- Added steering smoothing when script is deactivated
+
+Changelog 1.0.1.0:
+- Ported mod from Farming Simulator 22 to Farming Simulator 25
+- Fixed compatibility issue with various modded tractors failing to detect trailer joints properly
 ]]></en>
         <de><![CDATA[
 TrailerAssist erleichtert das Rückwärtsrangieren mit Anhänger. Bedienung mit folgenden Tasten:
@@ -26,6 +34,14 @@ A: nach links fahren
 D: nach rechts fahren
 
 Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
+
+Changelog 1.0.2.0:
+- Pulsieren des aktiven Status an Hängen behoben
+- Lenkungsglättung beim Deaktivieren des Skripts hinzugefügt
+
+Changelog 1.0.1.0:
+- Modifikation vom Landwirtschafts-Simulator 22 zum Landwirtschafts-Simulator 25 konvertiert
+- Kompatibilitätsproblem behoben, bei dem verschiedene gemoddete Traktoren die Anhänger nicht richtig erkannten
 ]]></de>
         <fr><![CDATA[
 TrailerAssist facilite les manoeuvres en marche arrière avec une remorque. Commandes:
@@ -37,15 +53,23 @@ A: Tourner à gauche
 D: Tourner à droite
 
 TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'écran. TrailerAssist n'est actif qu'en marche arrière.
+
+Changelog 1.0.2.0:
+- Correction de l'instabilité de l'état actif dans les pentes
+- Ajout d'un lissage de la direction lors de la désactivation du script
+
+Changelog 1.0.1.0:
+- Conversion du mod de Farming Simulator 22 vers Farming Simulator 25
+- Correction d'un problème de compatibilité avec divers tracteurs moddés qui ne détectaient pas correctement la remorque
 ]]></fr>
     </description>
     <multiplayer supported="true"/>
     <iconFilename>dds/icon_trailerAssist.dds</iconFilename>
-    <version>1.0.1.0</version>
+    <version>1.0.2.0</version>
     <l10n filenamePrefix="l10n/modDesc_l10n">
         <text name="taVERSION">
-            <de>TrailerAssist v1.0.1.0</de>
-            <en>TrailerAssist v1.0.1.0</en>
+            <de>TrailerAssist v1.0.2.0</de>
+            <en>TrailerAssist v1.0.2.0</en>
         </text>
     </l10n>
     <actions>
