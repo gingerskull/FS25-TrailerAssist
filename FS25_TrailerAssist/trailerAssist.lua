@@ -897,28 +897,36 @@ end
 -- steeringFunction
 --***************************************************************
 function trailerAssist.steeringFunction( target, angle, ratio )
+	local diff = angle - ratio
+	local absDiff = math.abs(diff)
+	
+	local sign = 0
+	if     diff < 0 then
+		sign = -1
+	elseif diff > 0 then
+		sign = 1
+	else
+		return target 
+	end
+
+	-- Soften the proportional correction for small errors to reduce hunting and over-steering
+	-- Keeps a minimum of 25% gain at 0 error so it will always reach exact center
+	local microErrorSmoothing = 1.0
+	if absDiff < 0.1 then
+		local t = absDiff / 0.1
+		microErrorSmoothing = 0.25 + 0.75 * t
+	end
+	
 	if trailerAssistGlobals.steeringFactor2 > 0 then	
-		local diff = angle - ratio
-		
-		local sign = 0
-		if     diff < 0 then
-			sign = -1
-			diff = -diff
-		elseif diff > 0 then
-			sign = 1
-		else
-			return target 
-		end
-		
-		local h2 = ( trailerAssistGlobals.steeringFactor2 * diff )^2
+		local h2 = ( trailerAssistGlobals.steeringFactor2 * absDiff )^2
 		if trailerAssistGlobals.steeringFactor1 > 0 then	
-			local h1 = trailerAssistGlobals.steeringFactor1 * diff			
+			local h1 = trailerAssistGlobals.steeringFactor1 * absDiff * microErrorSmoothing			
 			return trailerAssist.mbClamp( target + sign * 0.5 * ( h1 + h2 ), -1, 1 ) --math.min( h1, h2 )
 		end
 		return trailerAssist.mbClamp( target + sign * h2, -1, 1 )
 	end
 	
-	return trailerAssist.mbClamp( target + trailerAssistGlobals.steeringFactor1 * ( angle - ratio ), -1, 1 )
+	return trailerAssist.mbClamp( target + sign * trailerAssistGlobals.steeringFactor1 * absDiff * microErrorSmoothing, -1, 1 )
 end
 
 --***************************************************************
@@ -1008,7 +1016,9 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 					if joint.otherDirection then
 						degree  = trailerAssist.normalizeAngle( degree + math.pi )
 					end
+					
 					angle     = trailerAssist.mbClamp( degree / maxToolDegrees, -1, 1 )	
+
 					ratio     = trailerAssist.steeringFunction( target, angle, ratio )
 				end
 			end
@@ -1017,13 +1027,29 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 				ratio = -ratio
 			end
 						
-			local d = trailerAssistGlobals.steeringSpeed * 0.0005 * ( 2 + math.min( 18, self.lastSpeed * 3600 ) ) * dt
+			local baseD = trailerAssistGlobals.steeringSpeed * 0.0005 * ( 2 + math.min( 18, self.lastSpeed * 3600 ) ) * dt
 
 			if axisSideLast == nil then 
 				axisSideLast = axisSide
 			end 
 			
-			axisSide = axisSideLast + trailerAssist.mbClamp( ratio - axisSideLast, -d, d )
+			-- Apply a low-pass filter to the commanded ratio to eliminate high-frequency physics jitter
+			local smoothedRatio = self.taSmoothedRatio or ratio
+			local exponentialFactor = 1.0 - math.exp(-dt / 150) -- 150ms smoothing time constant
+			smoothedRatio = smoothedRatio + (ratio - smoothedRatio) * exponentialFactor
+			self.taSmoothedRatio = smoothedRatio
+			
+			-- Progressive steering speed: scale down d for smaller corrections
+			-- This stops the wheels from snapping left/right instantly.
+			local d = baseD
+			local correctionDist = math.abs(smoothedRatio - axisSideLast)
+			if correctionDist < 0.2 then
+				local t = correctionDist / 0.2
+				-- Keep minimum speed at 25% to ensure it fully reaches the target (prevents "never reaches zero" feel)
+				d = baseD * math.max(0.25, t) 
+			end
+			
+			axisSide = axisSideLast + trailerAssist.mbClamp( smoothedRatio - axisSideLast, -d, d )
 		end 
 	end 
 	self.taAxisSideLast = axisSide
