@@ -220,14 +220,36 @@ function trailerAssist:onUpdate(dt, isActiveForInput, isActiveForInputIgnoreSele
 
 
 	if self.isServer then
-		local taDir = self.movingDirection
-		if taDir == 0 then
-			if self.spec_drivable ~= nil and self.spec_drivable.reverserDirection ~= nil then
-				taDir = self.spec_drivable.reverserDirection
-			elseif self.spec_motorized ~= nil and self.spec_motorized.motor ~= nil and self.spec_motorized.motor.currentDirection ~= nil then 
-				taDir = self.spec_motorized.motor.currentDirection
-			end
+		-- Calculate physical speed in m/s
+		local speed = 0
+		if self.lastSpeedReal ~= nil then speed = math.abs(self.lastSpeedReal) * 1000 end
+		if speed == 0 and self.lastSpeed ~= nil then speed = math.abs(self.lastSpeed) * 1000 end
+		
+		local distanceMoved = speed * (dt / 1000)
+		
+		if self.taDistanceReverse == nil then self.taDistanceReverse = 0 end
+		if self.taDistanceForward == nil then self.taDistanceForward = 0 end
+		
+		if self.movingDirection < 0 then
+			self.taDistanceReverse = self.taDistanceReverse + distanceMoved
+			self.taDistanceForward = 0
+		elseif self.movingDirection > 0 then
+			self.taDistanceForward = self.taDistanceForward + distanceMoved
+			self.taDistanceReverse = 0
 		end
+		
+		local taDir = self.taHysteresisDir or 0
+		
+		-- Activate state only after 5 centimeters of accumulated physical travel
+		if self.taDistanceReverse > 0.05 then
+			taDir = -1
+		-- Deactivate and switch to forward after 5 centimeters of forward travel
+		elseif self.taDistanceForward > 0.05 then
+			taDir = 1
+		end
+		
+		self.taHysteresisDir = taDir
+		
 		trailerAssist.mbSetState( self, "taMovingDirection", taDir ) 
 
 		if self:getIsEntered() and trailerAssist.tableGetN( self.spec_attacherJoints.attachedImplements ) > 0 then
@@ -949,6 +971,7 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 	self.taAxisSideLast = nil 
 	
 	if trailerAssist.isActive( self ) and self.taJoints ~= nil then
+		self.taBlendOutActive = true
 		local sumTargetFactors = 0
 		for _,joint in pairs( self.taJoints ) do
 			if     ( self.taMovingDirection < 0 and joint.inTheBack )
@@ -1051,6 +1074,19 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 			
 			axisSide = axisSideLast + trailerAssist.mbClamp( smoothedRatio - axisSideLast, -d, d )
 		end 
+	elseif self.taBlendOutActive and axisSideLast ~= nil then
+		-- Script deactivated. Gently blend the wheels back to the user's manual input 
+		-- to prevent them from snapping back instantly.
+		local baseD = trailerAssistGlobals.steeringSpeed * 0.0005 * ( 2 + math.min( 18, self.lastSpeed * 3600 ) ) * dt
+		local targetUserAxis = axisSide
+		
+		-- Slew rate limit the return
+		axisSide = axisSideLast + trailerAssist.mbClamp( targetUserAxis - axisSideLast, -baseD, baseD )
+		
+		-- Once the wheels reach the user's requested angle, turn off the blend-out override
+		if math.abs(axisSide - targetUserAxis) < 0.001 then
+			self.taBlendOutActive = false
+		end
 	end 
 	self.taAxisSideLast = axisSide
 
