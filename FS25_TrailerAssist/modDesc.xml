@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="107">
-    <author>mogli/gingerskull</author>
+    <author>gingerskull</author>
     <title>
         <en>FS25 Trailer Assist</en>
     </title>
@@ -11,10 +11,10 @@ TrailerAssist makes reversing with a trailer easier. You activate it with the fo
 Alt+T: Toggle TrailerAssist permanently on/off.
 Shift+T: Hold to activate rotation mode (compass direction).
 Ctrl+T: Hold to activate tool angle mode (angle between tractor and trailer).
-A: Turn left
-D: Turn right
 
 You can see that TrailerAssist is activated when yellow degree numbers appear at the top of the screen. TrailerAssist will only be active when driving backwards.
+
+Original mod authored by Mogli12 (Stefan Biedenstein). This is a port to FS25.
 
 Changelog 1.0.2.0:
 - Fixed active state pulsing on inclines
@@ -30,10 +30,10 @@ TrailerAssist erleichtert das Rückwärtsrangieren mit Anhänger. Bedienung mit 
 Alt+T: TrailerAssist permanent ein-/ausschalten.
 Shift+T: Gedrückt halten für Rotationsmodus (Kompassrichtung).
 Strg+T: Gedrückt halten für Werkzeugwinkelmodus (Winkel zwischen Traktor und Anhänger).
-A: nach links fahren
-D: nach rechts fahren
 
 Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
+
+Ursprünglicher Mod erstellt von Mogli12 (Stefan Biedenstein). Dies ist eine Portierung für FS25.
 
 Changelog 1.0.2.0:
 - Pulsieren des aktiven Status an Hängen behoben
@@ -49,10 +49,10 @@ TrailerAssist facilite les manoeuvres en marche arrière avec une remorque. Comm
 Alt+T: Activer/désactiver TrailerAssist en permanence.
 Shift+T: Maintenir pour le mode rotation (direction boussole).
 Ctrl+T: Maintenir pour le mode angle d'outil (angle entre tracteur et remorque).
-A: Tourner à gauche
-D: Tourner à droite
 
 TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'écran. TrailerAssist n'est actif qu'en marche arrière.
+
+Mod original créé par Mogli12 (Stefan Biedenstein). Ceci est un portage vers FS25.
 
 Changelog 1.0.2.0:
 - Correction de l'instabilité de l'état actif dans les pentes
