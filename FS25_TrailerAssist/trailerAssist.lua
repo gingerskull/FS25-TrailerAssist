@@ -35,6 +35,17 @@ function trailerAssist.globalsReset( createIfMissing )
 	trailerAssistGlobals.textSize          = 0
 	trailerAssistGlobals.invertReverse     = true
 	
+	-- Smooths out high-frequency physical steering inputs. Higher = more delayed/smooth, Lower = instantaneous. Default: 100 (ms)
+	trailerAssistGlobals.steeringLowPassTimeConstant = 100
+	-- The angular error zone where proportional correction starts to soften. Default: 0.075
+	trailerAssistGlobals.microErrorSmoothingZone     = 0.05
+	-- The minimum proportional steering gain applied at 0 error to prevent never reaching exact center. Default: 0.5 (50%)
+	trailerAssistGlobals.microErrorSmoothingMinGain  = 0.75
+	-- The wheel rotation distance where the progressive steering speed limits take effect. Default: 0.1
+	trailerAssistGlobals.progressiveSteeringZone     = 0.05
+	-- The minimum wheel physical turning speed within the progressive zone. Default: 0.5 (50%)
+	trailerAssistGlobals.progressiveSteeringMinSpeed = 0.75
+	
 	trailerAssistGlobals.debug             = false
 
 	local file
@@ -932,11 +943,12 @@ function trailerAssist.steeringFunction( target, angle, ratio )
 	end
 
 	-- Soften the proportional correction for small errors to reduce hunting and over-steering
-	-- Keeps a minimum of 25% gain at 0 error so it will always reach exact center
 	local microErrorSmoothing = 1.0
-	if absDiff < 0.1 then
-		local t = absDiff / 0.1
-		microErrorSmoothing = 0.25 + 0.75 * t
+	local zone = trailerAssistGlobals.microErrorSmoothingZone
+	if absDiff < zone and zone > 0 then
+		local t = absDiff / zone
+		local minGain = trailerAssistGlobals.microErrorSmoothingMinGain
+		microErrorSmoothing = minGain + (1.0 - minGain) * t
 	end
 	
 	if trailerAssistGlobals.steeringFactor2 > 0 then	
@@ -1058,18 +1070,24 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 			
 			-- Apply a low-pass filter to the commanded ratio to eliminate high-frequency physics jitter
 			local smoothedRatio = self.taSmoothedRatio or ratio
-			local exponentialFactor = 1.0 - math.exp(-dt / 150) -- 150ms smoothing time constant
-			smoothedRatio = smoothedRatio + (ratio - smoothedRatio) * exponentialFactor
+			local timeConstant = trailerAssistGlobals.steeringLowPassTimeConstant
+			if timeConstant > 0 then
+				local exponentialFactor = 1.0 - math.exp(-dt / timeConstant)
+				smoothedRatio = smoothedRatio + (ratio - smoothedRatio) * exponentialFactor
+			else
+				smoothedRatio = ratio
+			end
 			self.taSmoothedRatio = smoothedRatio
 			
 			-- Progressive steering speed: scale down d for smaller corrections
 			-- This stops the wheels from snapping left/right instantly.
 			local d = baseD
 			local correctionDist = math.abs(smoothedRatio - axisSideLast)
-			if correctionDist < 0.2 then
-				local t = correctionDist / 0.2
-				-- Keep minimum speed at 25% to ensure it fully reaches the target (prevents "never reaches zero" feel)
-				d = baseD * math.max(0.25, t) 
+			local progZone = trailerAssistGlobals.progressiveSteeringZone
+			if correctionDist < progZone and progZone > 0 then
+				local t = correctionDist / progZone
+				local minSpeed = trailerAssistGlobals.progressiveSteeringMinSpeed
+				d = baseD * math.max(minSpeed, t) 
 			end
 			
 			axisSide = axisSideLast + trailerAssist.mbClamp( smoothedRatio - axisSideLast, -d, d )
