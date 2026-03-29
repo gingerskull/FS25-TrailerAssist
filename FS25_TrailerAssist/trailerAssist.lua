@@ -35,16 +35,30 @@ function trailerAssist.globalsReset( createIfMissing )
 	trailerAssistGlobals.textSize          = 0
 	trailerAssistGlobals.invertReverse     = true
 	
-	-- Smooths out high-frequency physical steering inputs. Higher = more delayed/smooth, Lower = instantaneous. Default: 100 (ms)
+	-- Adds a slight delay to the tractor's steering wheel to stop it from vibrating. 
+	-- Range: 0 to 500. Min (0) = Instant/jerky steering. Max (500) = Very sluggish response. Default: 100 (ms)
 	trailerAssistGlobals.steeringLowPassTimeConstant = 100
-	-- The angular error zone where proportional correction starts to soften. Default: 0.075
+	
+	-- The "sweet spot" range where the mod starts steering less aggressively to prevent overshooting the target. 
+	-- Range: 0.0 to 0.2. Min (0.0) = Wild left/right vibration. Max (0.2) = Slow to finalize straightening out. Default: 0.075
 	trailerAssistGlobals.microErrorSmoothingZone     = 0.05
-	-- The minimum proportional steering gain applied at 0 error to prevent never reaching exact center. Default: 0.5 (50%)
+	
+	-- Minimum steering power allowed when inside the sweet spot, preventing the steering from dying before reaching exact center. 
+	-- Range: 0.1 to 1.0. Min (0.1) = Gets stuck and never reaches exact target. Max (1.0) = Disables smoothing completely. Default: 0.5 (50%)
 	trailerAssistGlobals.microErrorSmoothingMinGain  = 0.75
-	-- The wheel rotation distance where the progressive steering speed limits take effect. Default: 0.1
+	
+	-- The range where the mod forces the physical tires to turn left/right more slowly to avoid sudden snaps. 
+	-- Range: 0.0 to 0.2. Min (0.0) = Wheels snap left/right instantly. Max (0.2) = Too much sluggish wheel turning. Default: 0.1
 	trailerAssistGlobals.progressiveSteeringZone     = 0.05
-	-- The minimum wheel physical turning speed within the progressive zone. Default: 0.5 (50%)
+	
+	-- Minimum tire turning speed allowed when making tiny corrections near the perfect angle. 
+	-- Range: 0.1 to 1.0. Min (0.1) = Steering wheel barely moves to fix errors. Max (1.0) = No speed limit applied. Default: 0.5 (50%)
 	trailerAssistGlobals.progressiveSteeringMinSpeed = 0.75
+	
+	-- For Turntable/Dolly Trailers ONLY: The maximum "head start" the target angle is allowed to take ahead of the actual trailer position. 
+	-- Keeps the script from randomly commanding a huge turn that would jackknife the dolly immediately. Set to 0 to disable.
+	-- Range: 0.1 to 0.5. Min (0.1) = Excessively slow tracking. Max (0.5+) = Oversteers and causes immediate jackknife. Default: 0.25 (25%)
+	trailerAssistGlobals.articulatedMaxLead          = 0.25
 	
 	trailerAssistGlobals.debug             = false
 
@@ -1043,6 +1057,21 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 			local target = ratio
 
 			local maxToolDegrees = trailerAssistGlobals.maxToolDegrees / sumTargetFactors
+			
+			if self.taMode == 2 and self.taJoints ~= nil and trailerAssist.tableGetN(self.taJoints) > 1 then
+				local joint = self.taJoints[1]
+				local degree = trailerAssist.getRelativeYRotation( joint.nodeVehicle, joint.nodeTrailer )
+				if joint.otherDirection then
+					degree = trailerAssist.normalizeAngle( degree + math.pi )
+				end
+				local currentRatio = trailerAssist.mbClamp( degree / maxToolDegrees, -1, 1 )
+				local maxLead = trailerAssistGlobals.articulatedMaxLead
+				if maxLead > 0 then
+					ratio = trailerAssist.mbClamp( ratio, currentRatio - maxLead, currentRatio + maxLead )
+					target = ratio
+				end
+			end
+			
 			for _,joint in pairs( self.taJoints ) do
 				if     ( self.taMovingDirection < 0 and joint.inTheBack )
 						or ( self.taMovingDirection > 0 and not ( joint.inTheBack  ) ) then
