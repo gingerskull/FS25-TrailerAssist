@@ -16,6 +16,11 @@ You can see that TrailerAssist is activated when yellow degree numbers appear at
 
 Original mod authored by Mogli12 (Stefan Biedenstein). This is a port to FS25.
 
+Changelog 1.0.3.0:
+- Fixed articulated trailers jackknifing in tool angle mode
+- Improved steering responsiveness and reduced sluggishness
+- Code cleanup and minor optimizations
+
 Changelog 1.0.2.0:
 - Fixed active state pulsing on inclines
 - Added steering smoothing when script is deactivated
@@ -34,6 +39,11 @@ Strg+T: Gedrückt halten für Werkzeugwinkelmodus (Winkel zwischen Traktor und A
 Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
 
 Ursprünglicher Mod erstellt von Mogli12 (Stefan Biedenstein). Dies ist eine Portierung für FS25.
+
+Changelog 1.0.3.0:
+- Überstrecken von Gelenkdeichsel-Anhängern im Werkzeugwinkelmodus verhindert
+- Lenkansprechverhalten verbessert und Trägheit reduziert
+- Code-Bereinigung und kleinere Optimierungen
 
 Changelog 1.0.2.0:
 - Pulsieren des aktiven Status an Hängen behoben
@@ -54,6 +64,11 @@ TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'éc
 
 Mod original créé par Mogli12 (Stefan Biedenstein). Ceci est un portage vers FS25.
 
+Changelog 1.0.3.0:
+- Empêche le chevauchement des remorques articulées en mode angle d'outil
+- Amélioration de la réactivité de la direction
+- Nettoyage du code et optimisations mineures
+
 Changelog 1.0.2.0:
 - Correction de l'instabilité de l'état actif dans les pentes
 - Ajout d'un lissage de la direction lors de la désactivation du script
@@ -65,11 +80,11 @@ Changelog 1.0.1.0:
     </description>
     <multiplayer supported="true"/>
     <iconFilename>dds/icon_trailerAssist.dds</iconFilename>
-    <version>1.0.2.0</version>
+    <version>1.0.3.0</version>
     <l10n filenamePrefix="l10n/modDesc_l10n">
         <text name="taVERSION">
-            <de>TrailerAssist v1.0.2.0</de>
-            <en>TrailerAssist v1.0.2.0</en>
+            <de>TrailerAssist v1.0.3.0</de>
+            <en>TrailerAssist v1.0.3.0</en>
         </text>
     </l10n>
     <actions>
