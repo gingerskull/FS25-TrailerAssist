@@ -95,6 +95,7 @@ end
 
 function trailerAssist.registerEventListeners(vehicleType)
 	for _,n in pairs( { "onLoad", 
+											"onPostLoad",
 											"onUpdate", 
 											"onUpdateTick", 
 											"onDraw",

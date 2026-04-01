@@ -20,7 +20,6 @@ function trailerAssistRegister.new( i18n )
 end 
 
 local function beforeFinalizeTypes( typeManager )
-
 	if trailerAssist == nil then 
 		print("Failed to add specialization trailerAssist")
 	else 
@@ -91,7 +90,34 @@ function trailerAssistRegister:update(dt)
 
 end;
 
+local function registerXMLSchema()
+	-- Register XML schema for FS25 savegame attributes
+	-- We save states as direct attributes: vehicles.vehicle(?).zzzTrailerAssist#taModeStatic
+	local status, err = pcall(function()
+		if XMLValueType == nil or Vehicle == nil or Vehicle.xmlSchemaSavegame == nil then
+			return false
+		end
+		
+		local schema = Vehicle.xmlSchemaSavegame
+		local basePath = "vehicles.vehicle(?).zzzTrailerAssist"
+		
+		-- Register attributes for each savable state
+		-- Using STRING type since setValue converts everything to string
+		schema:register(XMLValueType.STRING, basePath .. "#taModeStatic", "Trailer Assist static mode", nil, false)
+		
+		print("DEBUG: Registered XML schema for zzzTrailerAssist attributes")
+		return true
+	end)
+	
+	if not status then
+		print("DEBUG: Error registering XML schema: " .. tostring(err))
+	end
+end
+
 local function beforeLoadMission(mission)
+	-- Register XML schema when mission loads
+	registerXMLSchema()
+	
 	assert( g_trailerAssist == nil )
 	local base = trailerAssistRegister.new( g_i18n )
 	getfenv(0)["g_trailerAssist"] = base
@@ -146,6 +172,6 @@ local function init()
 	Mission00.load = Utils.prependedFunction(Mission00.load, beforeLoadMission)
 	Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00Finished, postLoadMissionFinished)
 	TypeManager.finalizeTypes = Utils.prependedFunction(TypeManager.finalizeTypes, beforeFinalizeTypes)
-end 
+end
 
 init()
