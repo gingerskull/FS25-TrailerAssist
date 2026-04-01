@@ -16,6 +16,10 @@ You can see that TrailerAssist is activated when yellow degree numbers appear at
 
 Original mod authored by Mogli12 (Stefan Biedenstein). This is a port to FS25.
 
+Changelog 1.0.3.1:
+- Fixed crash when resetting vehicle caused by FS25 XML savegame schema validation
+- Improved save/load persistence for mode settings
+
 Changelog 1.0.3.0:
 - Fixed articulated trailers jackknifing in tool angle mode
 - Improved steering responsiveness and reduced sluggishness
@@ -39,6 +43,10 @@ Strg+T: Gedrückt halten für Werkzeugwinkelmodus (Winkel zwischen Traktor und A
 Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
 
 Ursprünglicher Mod erstellt von Mogli12 (Stefan Biedenstein). Dies ist eine Portierung für FS25.
+
+Changelog 1.0.3.1:
+- Absturz beim Zurücksetzen von Fahrzeugen durch FS25 XML-Validierung behoben
+- Speicherung der Modus-Einstellungen verbessert
 
 Changelog 1.0.3.0:
 - Überstrecken von Gelenkdeichsel-Anhängern im Werkzeugwinkelmodus verhindert
@@ -64,6 +72,10 @@ TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'éc
 
 Mod original créé par Mogli12 (Stefan Biedenstein). Ceci est un portage vers FS25.
 
+Changelog 1.0.3.1:
+- Correction du crash lors de la réinitialisation du véhicule due à la validation du schéma XML FS25
+- Amélioration de la persistance des paramètres de mode
+
 Changelog 1.0.3.0:
 - Empêche le chevauchement des remorques articulées en mode angle d'outil
 - Amélioration de la réactivité de la direction
@@ -80,11 +92,11 @@ Changelog 1.0.1.0:
     </description>
     <multiplayer supported="true"/>
     <iconFilename>dds/icon_trailerAssist.dds</iconFilename>
-    <version>1.0.3.0</version>
+    <version>1.0.3.1</version>
     <l10n filenamePrefix="l10n/modDesc_l10n">
         <text name="taVERSION">
-            <de>TrailerAssist v1.0.3.0</de>
-            <en>TrailerAssist v1.0.3.0</en>
+            <de>TrailerAssist v1.0.3.1</de>
+            <en>TrailerAssist v1.0.3.1</en>
         </text>
     </l10n>
     <actions>
