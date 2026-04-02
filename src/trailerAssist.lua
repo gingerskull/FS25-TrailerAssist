@@ -4,7 +4,7 @@
 --
 
 --***************************************************************
-source(Utils.getFilename("mogliBase.lua", g_currentModDirectory))
+source(Utils.getFilename("src/mogliBase.lua", g_currentModDirectory))
 _G[g_currentModName..".mogliBase"].newClass( "trailerAssist" )
 --***************************************************************
 
@@ -22,48 +22,26 @@ function trailerAssist.globalsReset( createIfMissing )
 	trailerAssistGlobals.rotScale          = 0
 	trailerAssistGlobals.worldScale        = 0
 	trailerAssistGlobals.minWorldScale     = 0
-	trailerAssistGlobals.autoRotateBack    = 0
-	trailerAssistGlobals.steeringSpeed     = 0
-	trailerAssistGlobals.minSteeringSpeed  = 0
-	trailerAssistGlobals.maxSumDtCalc      = 0
+	trailerAssistGlobals.autoRotateBack             = 0
+	trailerAssistGlobals.maxSumDtCalc               = 0
 	trailerAssistGlobals.maxSumDtDisp      = 0
 	trailerAssistGlobals.speedLimit        = 0
 	trailerAssistGlobals.maxToolDegrees    = 0
 	trailerAssistGlobals.maxWorldRatio     = 0
 	trailerAssistGlobals.xPosCenter        = 0
 	trailerAssistGlobals.yPosTop           = 0
-	trailerAssistGlobals.textSize          = 0
-	trailerAssistGlobals.invertReverse     = true
-	
-	-- Adds a slight delay to the tractor's steering wheel to stop it from vibrating. 
-	-- Range: 0 to 500. Min (0) = Instant/jerky steering. Max (500) = Very sluggish response. Default: 100 (ms)
-	trailerAssistGlobals.steeringLowPassTimeConstant = 100
-	
-	-- The "sweet spot" range where the mod starts steering less aggressively to prevent overshooting the target. 
-	-- Range: 0.0 to 0.2. Min (0.0) = Wild left/right vibration. Max (0.2) = Slow to finalize straightening out. Default: 0.075
-	trailerAssistGlobals.microErrorSmoothingZone     = 0.05
-	
-	-- Minimum steering power allowed when inside the sweet spot, preventing the steering from dying before reaching exact center. 
-	-- Range: 0.1 to 1.0. Min (0.1) = Gets stuck and never reaches exact target. Max (1.0) = Disables smoothing completely. Default: 0.5 (50%)
-	trailerAssistGlobals.microErrorSmoothingMinGain  = 0.75
-	
-	-- The range where the mod forces the physical tires to turn left/right more slowly to avoid sudden snaps. 
-	-- Range: 0.0 to 0.2. Min (0.0) = Wheels snap left/right instantly. Max (0.2) = Too much sluggish wheel turning. Default: 0.1
-	trailerAssistGlobals.progressiveSteeringZone     = 0.05
-	
-	-- Minimum tire turning speed allowed when making tiny corrections near the perfect angle. 
-	-- Range: 0.1 to 1.0. Min (0.1) = Steering wheel barely moves to fix errors. Max (1.0) = No speed limit applied. Default: 0.5 (50%)
-	trailerAssistGlobals.progressiveSteeringMinSpeed = 0.75
-	
-	-- For Turntable/Dolly Trailers ONLY: The maximum "head start" the target angle is allowed to take ahead of the actual trailer position. 
-	-- Keeps the script from randomly commanding a huge turn that would jackknife the dolly immediately. Set to 0 to disable.
-	-- Range: 0.1 to 0.5. Min (0.1) = Excessively slow tracking. Max (0.5+) = Oversteers and causes immediate jackknife. Default: 0.25 (25%)
-	trailerAssistGlobals.articulatedMaxLead          = 0.25
-	
-	trailerAssistGlobals.debug             = false
+	trailerAssistGlobals.textSize                   = 0
+	trailerAssistGlobals.invertReverse              = true
+	trailerAssistGlobals.debug                      = false
+	trailerAssistGlobals.steeringLowPassTimeConstant = 0
+	trailerAssistGlobals.microErrorSmoothingZone    = 0
+	trailerAssistGlobals.microErrorSmoothingMinGain = 0
+	trailerAssistGlobals.progressiveSteeringZone    = 0
+	trailerAssistGlobals.progressiveSteeringMinSpeed = 0
+	trailerAssistGlobals.articulatedMaxLead         = 0
 
 	local file
-	file = trailerAssist.baseDirectory.."trailerAssistConfig.xml"
+	file = trailerAssist.baseDirectory.."src/trailerAssistConfig.xml"
 	if fileExists(file) then	
 		trailerAssist.globalsLoad( file, "trailerAssistGlobals", trailerAssistGlobals )	
 	else
@@ -139,7 +117,7 @@ function trailerAssist:onDraw()
 	if trailerAssist.isActive( self ) then
 	
 		if trailerAssist.backgroundOverlayId == nil then
-			trailerAssist.backgroundOverlayId    = createImageOverlay( Utils.getFilename( "dds/bg.dds", g_trailerAssist.taDirectory))
+			trailerAssist.backgroundOverlayId    = createImageOverlay( Utils.getFilename( "bg.dds", g_trailerAssist.taDirectory))
 			setOverlayColor( trailerAssist.backgroundOverlayId, 0,0,0, 0.4 )
 		end
 		if not getIsOverlayReady( trailerAssist.backgroundOverlayId ) then

@@ -11,16 +11,20 @@
 	<worldScale       type="degree" value="90" />
 	<minWorldScale    type="degree" value="10" />
 	<autoRotateBack   type="float"  value="0.1" />
-	<steeringSpeed    type="float"  value="2" />
-	<minSteeringSpeed type="float"  value="0.5" />
 	<maxSumDtCalc     type="float"  value="1000" />
 	<maxSumDtDisp     type="float"  value="200" />
 	<speedLimit       type="float"  value="10" />
 	<maxToolDegrees   type="degree" value="60" />
 	<maxWorldRatio    type="float"  value="0.75" />
-	<invertReverse    type="bool"   value="true" />
-	<debug            type="bool"   value="false" />
-	<xPosCenter       type="float"  value="0.5" />
-	<yPosTop          type="float"  value="0.97" />
-	<textSize         type="float"  value="0.03" />
+	<invertReverse               type="bool"   value="true" />
+	<debug                       type="bool"   value="false" />
+	<xPosCenter                  type="float"  value="0.5" />
+	<yPosTop                     type="float"  value="0.97" />
+	<textSize                    type="float"  value="0.03" />
+	<steeringLowPassTimeConstant type="float"  value="100" />
+	<microErrorSmoothingZone     type="float"  value="0.05" />
+	<microErrorSmoothingMinGain  type="float"  value="0.75" />
+	<progressiveSteeringZone     type="float"  value="0.05" />
+	<progressiveSteeringMinSpeed type="float"  value="0.75" />
+	<articulatedMaxLead          type="float"  value="0.25" />
 </trailerAssistGlobals>
