@@ -136,36 +136,6 @@ end
 function trailerAssistRegister:postLoadMission(mission)
 	self.postLoadMissionDone = true 
 	print("--- loading "..self.i18n:getText("taVERSION").." by mogli ---")
-
-	if g_languageShort ~= "en" then
-		l10nXmlFile = loadXMLFile("modL10n", Utils.getFilename("l10n/modDesc_l10n_en.xml",self.taDirectory))
-
-		if l10nXmlFile ~= nil then
-			local textI = 0
-
-			while true do
-				local key = string.format("l10n.texts.text(%d)", textI)
-
-				if not hasXMLProperty(l10nXmlFile, key) then
-					break
-				end
-
-				local name = getXMLString(l10nXmlFile, key .. "#name")
-				local text = getXMLString(l10nXmlFile, key .. "#text")
-
-				if name ~= nil and text ~= nil then
-					if not g_i18n:hasModText(name) then
-						print("Info (trailer assist): text "..tostring(name).." is not translated yet. Using English text.")
-						g_i18n:setText(name, text:gsub("\r\n", "\n"))
-					end
-				end
-
-				textI = textI + 1
-			end
-
-			delete(l10nXmlFile)
-		end 
-	end 
 end;
 
 local function init()

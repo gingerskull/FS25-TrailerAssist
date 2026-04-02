@@ -1,5 +1,3 @@
 del FS25_TrailerAssist.zip
-cd FS25_TrailerAssist
-tar -a -c -f ..\FS25_TrailerAssist.zip *.*
-cd ..
+tar -a -c -f FS25_TrailerAssist.zip modDesc.xml icon_trailerAssist.dds bg.dds src
 
