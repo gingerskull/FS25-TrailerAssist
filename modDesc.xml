@@ -5,7 +5,6 @@
         <en>FS25 Trailer Assist</en>
         <de>FS25 Trailer Assist</de>
         <fr>FS25 Trailer Assist</fr>
-        <it>FS25 AssistenteRimorchio</it>
     </title>
     <description>
         <en><![CDATA[
@@ -16,6 +15,8 @@ Shift+T: Hold to activate rotation mode (compass direction).
 Ctrl+T: Hold to activate tool angle mode (angle between tractor and trailer).
 
 You can see that TrailerAssist is activated when yellow degree numbers appear at the top of the screen. TrailerAssist will only be active when driving backwards.
+
+GitHub link: https://github.com/gingerskull/FS25-TrailerAssist
 
 Original mod authored by Mogli12 (Stefan Biedenstein). This is a port to FS25.
 
@@ -49,6 +50,8 @@ Strg+T: Gedrückt halten für Werkzeugwinkelmodus (Winkel zwischen Traktor und A
 
 Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
 
+GitHub link: https://github.com/gingerskull/FS25-TrailerAssist
+
 Ursprünglicher Mod erstellt von Mogli12 (Stefan Biedenstein). Dies ist eine Portierung für FS25.
 
 Changelog 1.0.3.2:
@@ -80,6 +83,8 @@ Shift+T: Maintenir pour le mode rotation (direction boussole).
 Ctrl+T: Maintenir pour le mode angle d'outil (angle entre tracteur et remorque).
 
 TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'écran. TrailerAssist n'est actif qu'en marche arrière.
+
+GitHub link: https://github.com/gingerskull/FS25-TrailerAssist
 
 Mod original créé par Mogli12 (Stefan Biedenstein). Ceci est un portage vers FS25.
 
@@ -113,43 +118,36 @@ Changelog 1.0.1.0:
             <en>TrailerAssist v1.0.3.2</en>
             <de>TrailerAssist v1.0.3.2</de>
             <fr>TrailerAssist v1.0.3.2</fr>
-            <it>AssistenteRimorchio v1.0.3.2</it>
         </text>
         <text name="taMODE0">
             <en>TrailerAssist [off]</en>
             <de>TrailerAssist [aus]</de>
             <fr>TrailerAssist [off]</fr>
-            <it>AssistenteRimorchio [disattivo]</it>
         </text>
         <text name="taMODE1">
             <en>TrailerAssist [rotation]</en>
             <de>TrailerAssist [Rotation]</de>
             <fr>TrailerAssist [rotation]</fr>
-            <it>AssistenteRimorchio [rotazione]</it>
         </text>
         <text name="taMODE2">
             <en>TrailerAssist [tool angle]</en>
             <de>TrailerAssist [Winkel]</de>
             <fr>TrailerAssist [angle de l'outil]</fr>
-            <it>AssistenteRimorchio [goniometro]</it>
         </text>
         <text name="input_taMODE">
             <en>TrailerAssist</en>
             <de>TrailerAssist</de>
             <fr>TrailerAssist</fr>
-            <it>AssistenteRimorchio</it>
         </text>
         <text name="input_taMODE1">
             <en>TrailerAssist [rotation]</en>
             <de>TrailerAssist [Rotation]</de>
             <fr>TrailerAssist [rotation]</fr>
-            <it>AssistenteRimorchio [rotazione]</it>
         </text>
         <text name="input_taMODE2">
             <en>TrailerAssist [tool angle]</en>
             <de>TrailerAssist [Winkel]</de>
             <fr>TrailerAssist [angle de l'outil]</fr>
-            <it>AssistenteRimorchio [goniometro]</it>
         </text>
     </l10n>
     <actions>
