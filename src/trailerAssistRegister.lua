@@ -105,11 +105,13 @@ local function registerXMLSchema()
 		-- Using STRING type since setValue converts everything to string
 		schema:register(XMLValueType.STRING, basePath .. "#taModeStatic", "Trailer Assist static mode", nil, false)
 		
-		print("DEBUG: Registered XML schema for zzzTrailerAssist attributes")
+		if trailerAssistGlobals and trailerAssistGlobals.debug then
+			print("DEBUG: Registered XML schema for zzzTrailerAssist attributes")
+		end
 		return true
 	end)
 	
-	if not status then
+	if not status and trailerAssistGlobals and trailerAssistGlobals.debug then
 		print("DEBUG: Error registering XML schema: " .. tostring(err))
 	end
 end
