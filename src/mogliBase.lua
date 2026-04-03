@@ -447,14 +447,18 @@ else
 			-- FS25: Use direct vehicle attributes for simple persistence
 			-- Format: key#taModeStatic where key is like "vehicles.vehicle(0).zzzTrailerAssist"
 			if type(xmlFile) == "table" then
-				print("DEBUG saveToXMLFile: key=" .. tostring(key))
+				if trailerAssistGlobals and trailerAssistGlobals.debug then
+					print("DEBUG saveToXMLFile: key=" .. tostring(key))
+				end
 				for level1,state in pairs( self[_globalClassName_.."StateHandler"] ) do
 					if state.save then
 						local value = _newClass_.mbGetState( self, level1 )
 						if value ~= nil and type(value) ~= "table" then
 							-- Save directly as attribute: vehicles.vehicle(0).zzzTrailerAssist#taModeStatic
 							local attrPath = key.."#"..level1
-							print("DEBUG saveToXMLFile: saving " .. level1 .. "=" .. tostring(value) .. " to " .. attrPath)
+							if trailerAssistGlobals and trailerAssistGlobals.debug then
+								print("DEBUG saveToXMLFile: saving " .. level1 .. "=" .. tostring(value) .. " to " .. attrPath)
+							end
 							xmlFile:setValue(attrPath, tostring(value))
 						end
 					end
@@ -483,14 +487,18 @@ else
 					specName = "TrailerAssist"
 				end
 				local specKey = key .. ".zzz" .. specName
-				print("DEBUG onPostLoad: key=" .. tostring(key) .. " specKey=" .. specKey)
+				if trailerAssistGlobals and trailerAssistGlobals.debug then
+					print("DEBUG onPostLoad: key=" .. tostring(key) .. " specKey=" .. specKey)
+				end
 				
 				for level1,state in pairs( self[_globalClassName_.."StateHandler"] ) do
 					if state.save then
 						-- Try to load value: vehicles.vehicle(0).zzzTrailerAssist#taModeStatic
 						local attrPath = specKey.."#"..level1
 						local value = xmlFile:getValue(attrPath)
-						print("DEBUG onPostLoad: loading " .. attrPath .. "=" .. tostring(value))
+						if trailerAssistGlobals and trailerAssistGlobals.debug then
+							print("DEBUG onPostLoad: loading " .. attrPath .. "=" .. tostring(value))
+						end
 						if value ~= nil then
 							-- Convert based on default value type
 							if type(state.default) == "number" then
@@ -499,7 +507,9 @@ else
 								value = value == "true" or value == true
 							end
 							if value ~= nil then
-								print("DEBUG onPostLoad: setting " .. level1 .. "=" .. tostring(value))
+								if trailerAssistGlobals and trailerAssistGlobals.debug then
+									print("DEBUG onPostLoad: setting " .. level1 .. "=" .. tostring(value))
+								end
 								_newClass_.mbSetState( self, level1, value, true)
 							end
 						end
@@ -508,7 +518,9 @@ else
 				
 				-- Special handling for TrailerAssist: taModeStatic needs to activate taMode
 				if _globalClassName_ == "trailerAssist" and self.taModeStatic ~= nil and self.taMode ~= nil then
-					print("DEBUG onPostLoad: syncing taMode to taModeStatic=" .. tostring(self.taModeStatic))
+					if trailerAssistGlobals and trailerAssistGlobals.debug then
+						print("DEBUG onPostLoad: syncing taMode to taModeStatic=" .. tostring(self.taModeStatic))
+					end
 					_newClass_.mbSetState( self, "taMode", self.taModeStatic, true)
 				end
 			end
