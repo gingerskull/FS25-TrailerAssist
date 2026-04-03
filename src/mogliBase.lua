@@ -440,71 +440,88 @@ else
 	--********************************
 	--function _newClass_:saveStatsToXMLFile(xmlFile, key)
 		function _newClass_:saveToXMLFile(xmlFile, key)
-			if self[_globalClassName_.."StateHandler"] ~= nil then		
-				local i = 0
+			if self[_globalClassName_.."StateHandler"] == nil then
+				return
+			end
+			
+			-- FS25: Use direct vehicle attributes for simple persistence
+			-- Format: key#taModeStatic where key is like "vehicles.vehicle(0).zzzTrailerAssist"
+			if type(xmlFile) == "table" then
+				if trailerAssistGlobals and trailerAssistGlobals.debug then
+					print("DEBUG saveToXMLFile: key=" .. tostring(key))
+				end
 				for level1,state in pairs( self[_globalClassName_.."StateHandler"] ) do
 					if state.save then
 						local value = _newClass_.mbGetState( self, level1 )
-						
-						if value ~= nil and ( state.default == nil or not mogliBase30.compare( state.default, value ) ) then
-							local vType  = mogliBase30.getValueType( value )
-							local xmlKey = string.format("%s.state(%d)", key, i)
-							i = i + 1
-							setXMLString(xmlFile, xmlKey.."#name", HTMLUtil.encodeToHTML(level1))
-							setXMLString(xmlFile, xmlKey.."#type", HTMLUtil.encodeToHTML(vType))
-							
-							if     vType == "string"  then 
-								setXMLString(xmlFile, xmlKey.."#value", HTMLUtil.encodeToHTML(value))
-							elseif vType == "int8"    
-									or vType == "int32" then   
-								setXMLInt(xmlFile, xmlKey.."#value", value)
-							elseif vType == "float32" 
-									or vType == "number"  then 
-								setXMLFloat(xmlFile, xmlKey.."#value", value)
-							elseif vType == "boolean" then 
-								setXMLBool(xmlFile, xmlKey.."#value", value)
+						if value ~= nil and type(value) ~= "table" then
+							-- Save directly as attribute: vehicles.vehicle(0).zzzTrailerAssist#taModeStatic
+							local attrPath = key.."#"..level1
+							if trailerAssistGlobals and trailerAssistGlobals.debug then
+								print("DEBUG saveToXMLFile: saving " .. level1 .. "=" .. tostring(value) .. " to " .. attrPath)
 							end
+							xmlFile:setValue(attrPath, tostring(value))
 						end
 					end
-				end	
-			end		
+				end
+			end
 		end;
 
 	--********************************
 	-- loadFromAttributesAndNodes
 	--********************************
-		function _newClass_:onPostLoad(samegame)
-			if savegame ~= nil then
-				local xmlFile = savegame.xmlFile
-				local key     = savegame.key
-				local i = 0
-				while true do
-					local xmlKey = string.format("%s.%s.state(%d)", key, _globalClassName_, i)
-					i = i + 1
-					local level1 = HTMLUtil.decodeFromHTML(getXMLString(xmlFile, xmlKey.."#name"))
-					if level1 == nil then
-						break
+		function _newClass_:onPostLoad(savegame)
+			if savegame == nil or self[_globalClassName_.."StateHandler"] == nil then
+				return
+			end
+			
+			local xmlFile = savegame.xmlFile
+			local key = savegame.key
+			
+			-- FS25: Load from direct vehicle attributes
+			-- Construct the spec path: vehicles.vehicle(0).zzzTrailerAssist
+			if type(xmlFile) == "table" then
+				-- The spec name is registered as "zzz" prefix + class name with proper capitalization
+				-- For trailerAssist, the spec name is zzzTrailerAssist (capital T)
+				local specName = _globalClassName_
+				if specName == "trailerAssist" then
+					specName = "TrailerAssist"
+				end
+				local specKey = key .. ".zzz" .. specName
+				if trailerAssistGlobals and trailerAssistGlobals.debug then
+					print("DEBUG onPostLoad: key=" .. tostring(key) .. " specKey=" .. specKey)
+				end
+				
+				for level1,state in pairs( self[_globalClassName_.."StateHandler"] ) do
+					if state.save then
+						-- Try to load value: vehicles.vehicle(0).zzzTrailerAssist#taModeStatic
+						local attrPath = specKey.."#"..level1
+						local value = xmlFile:getValue(attrPath)
+						if trailerAssistGlobals and trailerAssistGlobals.debug then
+							print("DEBUG onPostLoad: loading " .. attrPath .. "=" .. tostring(value))
+						end
+						if value ~= nil then
+							-- Convert based on default value type
+							if type(state.default) == "number" then
+								value = tonumber(value)
+							elseif type(state.default) == "boolean" then
+								value = value == "true" or value == true
+							end
+							if value ~= nil then
+								if trailerAssistGlobals and trailerAssistGlobals.debug then
+									print("DEBUG onPostLoad: setting " .. level1 .. "=" .. tostring(value))
+								end
+								_newClass_.mbSetState( self, level1, value, true)
+							end
+						end
 					end
-					local vType = HTMLUtil.decodeFromHTML(getXMLString(xmlFile, xmlKey.."#type"))
-					local value = nil
-					if     vType == nil then
-					elseif vType == "string"  then 
-						value = HTMLUtil.decodeFromHTML(getXMLString(xmlFile, xmlKey.."#value"))
-					elseif vType == "int8"    
-							or vType == "int32" then 
-						value = getXMLInt(xmlFile, xmlKey.."#value")
-					elseif vType == "float32" 
-							or vType == "number"  then 
-						value = getXMLFloat(xmlFile, xmlKey.."#value")
-					elseif vType == "boolean" then 
-						value = getXMLBool(xmlFile, xmlKey.."#value")
+				end
+				
+				-- Special handling for TrailerAssist: taModeStatic needs to activate taMode
+				if _globalClassName_ == "trailerAssist" and self.taModeStatic ~= nil and self.taMode ~= nil then
+					if trailerAssistGlobals and trailerAssistGlobals.debug then
+						print("DEBUG onPostLoad: syncing taMode to taModeStatic=" .. tostring(self.taModeStatic))
 					end
-					
-				--print(tostring(xmlKey).." "..tostring(level1).." "..tostring(vType).." "..tostring(value))
-					
-					if value ~= nil then
-						_newClass_.mbSetState( self, level1, value, true)
-					end
+					_newClass_.mbSetState( self, "taMode", self.taModeStatic, true)
 				end
 			end
 		end

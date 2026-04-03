@@ -20,7 +20,6 @@ function trailerAssistRegister.new( i18n )
 end 
 
 local function beforeFinalizeTypes( typeManager )
-
 	if trailerAssist == nil then 
 		print("Failed to add specialization trailerAssist")
 	else 
@@ -91,7 +90,36 @@ function trailerAssistRegister:update(dt)
 
 end;
 
+local function registerXMLSchema()
+	-- Register XML schema for FS25 savegame attributes
+	-- We save states as direct attributes: vehicles.vehicle(?).zzzTrailerAssist#taModeStatic
+	local status, err = pcall(function()
+		if XMLValueType == nil or Vehicle == nil or Vehicle.xmlSchemaSavegame == nil then
+			return false
+		end
+		
+		local schema = Vehicle.xmlSchemaSavegame
+		local basePath = "vehicles.vehicle(?).zzzTrailerAssist"
+		
+		-- Register attributes for each savable state
+		-- Using STRING type since setValue converts everything to string
+		schema:register(XMLValueType.STRING, basePath .. "#taModeStatic", "Trailer Assist static mode", nil, false)
+		
+		if trailerAssistGlobals and trailerAssistGlobals.debug then
+			print("DEBUG: Registered XML schema for zzzTrailerAssist attributes")
+		end
+		return true
+	end)
+	
+	if not status and trailerAssistGlobals and trailerAssistGlobals.debug then
+		print("DEBUG: Error registering XML schema: " .. tostring(err))
+	end
+end
+
 local function beforeLoadMission(mission)
+	-- Register XML schema when mission loads
+	registerXMLSchema()
+	
 	assert( g_trailerAssist == nil )
 	local base = trailerAssistRegister.new( g_i18n )
 	getfenv(0)["g_trailerAssist"] = base
@@ -110,42 +138,12 @@ end
 function trailerAssistRegister:postLoadMission(mission)
 	self.postLoadMissionDone = true 
 	print("--- loading "..self.i18n:getText("taVERSION").." by mogli ---")
-
-	if g_languageShort ~= "en" then
-		l10nXmlFile = loadXMLFile("modL10n", Utils.getFilename("l10n/modDesc_l10n_en.xml",self.taDirectory))
-
-		if l10nXmlFile ~= nil then
-			local textI = 0
-
-			while true do
-				local key = string.format("l10n.texts.text(%d)", textI)
-
-				if not hasXMLProperty(l10nXmlFile, key) then
-					break
-				end
-
-				local name = getXMLString(l10nXmlFile, key .. "#name")
-				local text = getXMLString(l10nXmlFile, key .. "#text")
-
-				if name ~= nil and text ~= nil then
-					if not g_i18n:hasModText(name) then
-						print("Info (trailer assist): text "..tostring(name).." is not translated yet. Using English text.")
-						g_i18n:setText(name, text:gsub("\r\n", "\n"))
-					end
-				end
-
-				textI = textI + 1
-			end
-
-			delete(l10nXmlFile)
-		end 
-	end 
 end;
 
 local function init()
 	Mission00.load = Utils.prependedFunction(Mission00.load, beforeLoadMission)
 	Mission00.loadMission00Finished = Utils.appendedFunction(Mission00.loadMission00Finished, postLoadMissionFinished)
 	TypeManager.finalizeTypes = Utils.prependedFunction(TypeManager.finalizeTypes, beforeFinalizeTypes)
-end 
+end
 
 init()
