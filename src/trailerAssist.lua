@@ -868,13 +868,66 @@ end
 
 
 --***************************************************************
+-- validateNodes
+--***************************************************************
+function trailerAssist.nodesExist(root, node)
+	if root == nil or node == nil or root == 0 or node == 0 then
+		return false
+	end
+	-- Check if entities exist before calling functions on them
+	-- entityExists is an FS25 function that safely checks validity
+	if entityExists ~= nil then
+		return entityExists(root) and entityExists(node)
+	end
+	-- Fallback: use pcall if entityExists is not available
+	local status = pcall(function()
+		local x1, y1, z1 = getWorldTranslation(root)
+		local x2, y2, z2 = getWorldTranslation(node)
+		return x1 ~= nil and x2 ~= nil
+	end)
+	return status
+end
+
+--***************************************************************
+-- validateJoints
+-- Returns true if all joints are valid, false otherwise
+--***************************************************************
+function trailerAssist.validateJoints(joints)
+	if joints == nil then
+		return false
+	end
+	for _, joint in pairs(joints) do
+		if not trailerAssist.nodesExist(joint.nodeVehicle, joint.nodeTrailer) then
+			return false
+		end
+	end
+	return true
+end
+
+--***************************************************************
 -- getRelativeYRotation
 --***************************************************************
 function trailerAssist.getRelativeYRotation(root,node)
-	if root == nil or node == nil then
+	if not trailerAssist.nodesExist(root, node) then
 		return 0
 	end
-	local x, y, z = worldDirectionToLocal(node, localDirectionToWorld(root, 0, 0, 1))
+	
+	-- Check entity existence before calling functions (prevents log spam)
+	if entityExists ~= nil then
+		if not entityExists(root) or not entityExists(node) then
+			return 0
+		end
+	end
+	
+	-- Wrap worldDirectionToLocal in pcall to handle any remaining edge cases
+	local status, x, y, z = pcall(function()
+		return worldDirectionToLocal(node, localDirectionToWorld(root, 0, 0, 1))
+	end)
+	
+	if not status or x == nil then
+		return 0
+	end
+	
 	local dot = trailerAssist.mbClamp( z, -1, 1 )
 --dot = dot / math.sqrt(x*x + z*z)
 	local angle = math.acos(dot)
@@ -885,7 +938,24 @@ function trailerAssist.getRelativeYRotation(root,node)
 end
 
 function trailerAssist.getWorldYRotation(node)
-	local x, _, z = localDirectionToWorld(node, 0, 0, 1)
+	if node == nil or node == 0 then
+		return 0
+	end
+	
+	-- Check if entity exists before calling functions on it
+	if entityExists ~= nil and not entityExists(node) then
+		return 0
+	end
+	
+	-- Wrap in pcall to handle any remaining edge cases
+	local status, x, _, z = pcall(function()
+		return localDirectionToWorld(node, 0, 0, 1)
+	end)
+	
+	if not status or x == nil then
+		return 0
+	end
+	
 	if math.abs(x) < 1e-3 and math.abs(z) < 1e-3 then
 		return 0
 	end
@@ -907,6 +977,14 @@ function trailerAssist.getRelativeTranslation(root,node)
 	if root == nil or node == nil then
 		return 0,0,0
 	end
+	
+	-- Check entity existence before calling functions (prevents log spam)
+	if entityExists ~= nil then
+		if not entityExists(root) or not entityExists(node) then
+			return 0,0,0
+		end
+	end
+	
 	local x,y,z;
 	local state,result = pcall( getParent, node )
 	if not ( state ) then
@@ -976,6 +1054,15 @@ function trailerAssist:newUpdateVehiclePhysics( superFunc, axisForward, axisSide
 	self.taAxisSideLast = nil 
 	
 	if trailerAssist.isActive( self ) and self.taJoints ~= nil then
+		-- Validate joints before using them (trailer may have been sold/detached)
+		if not trailerAssist.validateJoints( self.taJoints ) then
+			-- Joints are invalid, clear them and disable TrailerAssist temporarily
+			self.taJoints = nil
+			trailerAssist.mbSetState( self, "taIsPossible", false )
+			-- Call parent function normally without TrailerAssist
+			return superFunc( self, axisForward, axisSide, doHandbrake, dt )
+		end
+		
 		self.taBlendOutActive = true
 		local sumTargetFactors = 0
 		for _,joint in pairs( self.taJoints ) do
