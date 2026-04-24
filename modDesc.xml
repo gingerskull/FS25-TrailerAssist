@@ -1,151 +1,89 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="107">
+<modDesc descVersion="108">
     <author>gingerskull</author>
     <title>
-        <en>FS25 Trailer Assist</en>
+        <en>Trailer Assist</en>
+        <de>Anhängerassistent</de>
+        <fr>Assistant Remorque</fr>
     </title>
     <description>
         <en><![CDATA[
-TrailerAssist makes reversing with a trailer easier. You activate it with the following keys:
+Trailer Assist makes reversing with a trailer easier. You activate it with the following keys:
 
-Alt+T: Toggle TrailerAssist permanently on/off.
+Alt+T: Toggle Trailer Assist permanently on/off.
 Shift+T: Hold to activate rotation mode (compass direction).
 Ctrl+T: Hold to activate tool angle mode (angle between tractor and trailer).
 
-You can see that TrailerAssist is activated when yellow degree numbers appear at the top of the screen. TrailerAssist will only be active when driving backwards.
+You can see that Trailer Assist is activated when yellow degree numbers appear at the top of the screen. Trailer Assist will only be active when driving backwards.
 
 GitHub link: https://github.com/gingerskull/FS25-TrailerAssist
 
 Original mod authored by Mogli12 (Stefan Biedenstein). This is a port to FS25.
-
-Changelog 1.0.3.2:
-- Restructured mod layout for easier maintenance
-- Added configurable steering parameters (low-pass filter, error smoothing, progressive steering)
-
-Changelog 1.0.3.1:
-- Fixed crash when resetting vehicle caused by FS25 XML savegame schema validation
-- Improved save/load persistence for mode settings
-
-Changelog 1.0.3.0:
-- Fixed articulated trailers jackknifing in tool angle mode
-- Improved steering responsiveness and reduced sluggishness
-- Code cleanup and minor optimizations
-
-Changelog 1.0.2.0:
-- Fixed active state pulsing on inclines
-- Added steering smoothing when script is deactivated
-
-Changelog 1.0.1.0:
-- Ported mod from Farming Simulator 22 to Farming Simulator 25
-- Fixed compatibility issue with various modded tractors failing to detect trailer joints properly
 ]]></en>
         <de><![CDATA[
-TrailerAssist erleichtert das Rückwärtsrangieren mit Anhänger. Bedienung mit folgenden Tasten:
+Anhängerassistent erleichtert das Rückwärtsrangieren mit Anhänger. Bedienung mit folgenden Tasten:
 
-Alt+T: TrailerAssist permanent ein-/ausschalten.
+Alt+T: Anhängerassistent permanent ein-/ausschalten.
 Shift+T: Gedrückt halten für Rotationsmodus (Kompassrichtung).
 Strg+T: Gedrückt halten für Werkzeugwinkelmodus (Winkel zwischen Traktor und Anhänger).
 
-Man erkennt, dass TrailerAssist eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. TrailerAssist wird nur beim Rückwärtsfahren aktiviert.
+Man erkennt, dass Anhängerassistent eingeschaltet ist, wenn am oberen Bildrand gelbe Gradzahlen angezeigt werden. Anhängerassistent wird nur beim Rückwärtsfahren aktiviert.
 
 GitHub link: https://github.com/gingerskull/FS25-TrailerAssist
 
 Ursprünglicher Mod erstellt von Mogli12 (Stefan Biedenstein). Dies ist eine Portierung für FS25.
-
-Changelog 1.0.3.2:
-- Mod-Struktur überarbeitet für einfachere Wartung
-- Konfigurierbare Lenkparameter hinzugefügt
-
-Changelog 1.0.3.1:
-- Absturz beim Zurücksetzen von Fahrzeugen durch FS25 XML-Validierung behoben
-- Speicherung der Modus-Einstellungen verbessert
-
-Changelog 1.0.3.0:
-- Überstrecken von Gelenkdeichsel-Anhängern im Werkzeugwinkelmodus verhindert
-- Lenkansprechverhalten verbessert und Trägheit reduziert
-- Code-Bereinigung und kleinere Optimierungen
-
-Changelog 1.0.2.0:
-- Pulsieren des aktiven Status an Hängen behoben
-- Lenkungsglättung beim Deaktivieren des Skripts hinzugefügt
-
-Changelog 1.0.1.0:
-- Modifikation vom Landwirtschafts-Simulator 22 zum Landwirtschafts-Simulator 25 konvertiert
-- Kompatibilitätsproblem behoben, bei dem verschiedene gemoddete Traktoren die Anhänger nicht richtig erkannten
 ]]></de>
         <fr><![CDATA[
-TrailerAssist facilite les manoeuvres en marche arrière avec une remorque. Commandes:
+Assistant Remorque facilite les manoeuvres en marche arrière avec une remorque. Commandes:
 
-Alt+T: Activer/désactiver TrailerAssist en permanence.
+Alt+T: Activer/désactiver Assistant Remorque en permanence.
 Shift+T: Maintenir pour le mode rotation (direction boussole).
 Ctrl+T: Maintenir pour le mode angle d'outil (angle entre tracteur et remorque).
 
-TrailerAssist est actif lorsque des degrés jaunes apparaissent en haut de l'écran. TrailerAssist n'est actif qu'en marche arrière.
+Assistant Remorque est actif lorsque des degrés jaunes apparaissent en haut de l'écran. Assistant Remorque n'est actif qu'en marche arrière.
 
 GitHub link: https://github.com/gingerskull/FS25-TrailerAssist
 
-Mod original créé par Mogli12 (Stefan Biedenstein). Ceci est un portage vers FS25.
-
-Changelog 1.0.3.2:
-- Restructuration du mod pour maintenance facilitée
-- Ajout de paramètres de direction configurables
-
-Changelog 1.0.3.1:
-- Correction du crash lors de la réinitialisation du véhicule due à la validation du schéma XML FS25
-- Amélioration de la persistance des paramètres de mode
-
-Changelog 1.0.3.0:
-- Empêche le chevauchement des remorques articulées en mode angle d'outil
-- Amélioration de la réactivité de la direction
-- Nettoyage du code et optimisations mineures
-
-Changelog 1.0.2.0:
-- Correction de l'instabilité de l'état actif dans les pentes
-- Ajout d'un lissage de la direction lors de la désactivation du script
-
-Changelog 1.0.1.0:
-- Conversion du mod de Farming Simulator 22 vers Farming Simulator 25
-- Correction d'un problème de compatibilité avec divers tracteurs moddés qui ne détectaient pas correctement la remorque
-]]></fr>
+Mod original créé par Mogli12 (Stefan Biedenstein). Ceci est un portage vers FS25.]]></fr>
     </description>
     <multiplayer supported="true"/>
     <iconFilename>icon_trailerAssist.dds</iconFilename>
-    <version>1.0.3.2</version>
+    <version>1.0.0.0</version>
     <l10n>
         <text name="taVERSION">
-            <en>TrailerAssist v1.0.3.2</en>
-            <de>TrailerAssist v1.0.3.2</de>
-            <fr>TrailerAssist v1.0.3.2</fr>
+            <en>Trailer Assist v1.0.0.0</en>
+            <de>Anhängerassistent v1.0.0.0</de>
+            <fr>Assistant Remorque v1.0.0.0</fr>
         </text>
         <text name="taMODE0">
-            <en>TrailerAssist [off]</en>
-            <de>TrailerAssist [aus]</de>
-            <fr>TrailerAssist [off]</fr>
+            <en>Trailer Assist [off]</en>
+            <de>Anhängerassistent [aus]</de>
+            <fr>Assistant Remorque [désactivé]</fr>
         </text>
         <text name="taMODE1">
-            <en>TrailerAssist [rotation]</en>
-            <de>TrailerAssist [Rotation]</de>
-            <fr>TrailerAssist [rotation]</fr>
+            <en>Trailer Assist [Rotation]</en>
+            <de>Anhängerassistent [Rotation]</de>
+            <fr>Assistant Remorque [Rotation]</fr>
         </text>
         <text name="taMODE2">
-            <en>TrailerAssist [tool angle]</en>
-            <de>TrailerAssist [Winkel]</de>
-            <fr>TrailerAssist [angle de l'outil]</fr>
+            <en>Trailer Assist [Tool Angle]</en>
+            <de>Anhängerassistent [Winkel]</de>
+            <fr>Assistant Remorque [Angle de l'Outil]</fr>
         </text>
         <text name="input_taMODE">
-            <en>TrailerAssist</en>
-            <de>TrailerAssist</de>
-            <fr>TrailerAssist</fr>
+            <en>Trailer Assist</en>
+            <de>Anhängerassistent</de>
+            <fr>Assistant Remorque</fr>
         </text>
         <text name="input_taMODE1">
-            <en>TrailerAssist [rotation]</en>
-            <de>TrailerAssist [Rotation]</de>
-            <fr>TrailerAssist [rotation]</fr>
+            <en>Trailer Assist [Rotation]</en>
+            <de>Anhängerassistent [Rotation]</de>
+            <fr>Assistant Remorque [Rotation]</fr>
         </text>
         <text name="input_taMODE2">
-            <en>TrailerAssist [tool angle]</en>
-            <de>TrailerAssist [Winkel]</de>
-            <fr>TrailerAssist [angle de l'outil]</fr>
+            <en>Trailer Assist [Tool Angle]</en>
+            <de>Anhängerassistent [Winkel]</de>
+            <fr>Assistant Remorque [Angle de l'Outil]</fr>
         </text>
     </l10n>
     <actions>
