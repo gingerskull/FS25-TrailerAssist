@@ -1,5 +1,7 @@
 # Trailer Assist — Farming Simulator 25
 
+### Available now on [ModHub](https://www.farming-simulator.com/mod.php?lang=en&country=us&mod_id=123456).
+
 Makes reversing with a trailer easier. Automatically steers the tractor so the trailer goes where you point it.
 
 Originally created by [mogli (Stefan Biedenstein)](https://github.com/Mogli12), ported to FS25.
